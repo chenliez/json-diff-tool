@@ -1,0 +1,17 @@
+{
+  "name": "Product",
+  "version": "1.0.1",
+  "settings": {
+    "enabled": true,
+    "timeout": 60,
+    "features": {
+      "logging": true,
+      "caching": true
+    }
+  },
+  "tags": ["stable", "production", "updated"],
+  "metadata": {
+    "created": "2023-01-01",
+    "author": "Jane Smith"
+  }
+}

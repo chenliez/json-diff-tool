@@ -1,0 +1,17 @@
+{
+  "name": "Product",
+  "version": "1.0.0",
+  "settings": {
+    "enabled": true,
+    "timeout": 30,
+    "features": {
+      "logging": true,
+      "caching": false
+    }
+  },
+  "tags": ["stable", "production"],
+  "metadata": {
+    "created": "2023-01-01",
+    "author": "John Doe"
+  }
+}
