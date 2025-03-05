@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
-import { findJsonDifferences } from "./jsonDiff";
+import { findJsonDifferences, JsonValue } from "./jsonDiff";
 import * as fs from "fs";
 import * as path from "path";
 
 /**
  * CLI tool to compare two JSON files and output the differences
  */
-export async function main() {
+export async function main(): Promise<void> {
   try {
     // Get command line arguments
     const args = process.argv.slice(2);
@@ -44,7 +44,8 @@ export async function main() {
     const originalContent = fs.readFileSync(originalFilePath, "utf8");
     const modifiedContent = fs.readFileSync(modifiedFilePath, "utf8");
 
-    let original, modified;
+    let original: JsonValue;
+    let modified: JsonValue;
 
     try {
       original = JSON.parse(originalContent);

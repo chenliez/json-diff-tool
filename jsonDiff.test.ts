@@ -1,4 +1,4 @@
-import { findJsonDifferences } from "./jsonDiff";
+import { findJsonDifferences, JsonValue, JsonObject } from "./jsonDiff";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -34,8 +34,8 @@ describe("findJsonDifferences", () => {
   });
 
   test("should return the modified array when arrays have different lengths", () => {
-    const original = [1, 2, 3];
-    const modified = [1, 2, 3, 4];
+    const original: JsonValue[] = [1, 2, 3];
+    const modified: JsonValue[] = [1, 2, 3, 4];
     expect(findJsonDifferences(original, modified)).toEqual(modified);
   });
 
@@ -53,8 +53,8 @@ describe("findJsonDifferences", () => {
   });
 
   test("should handle nested arrays", () => {
-    const original = [1, [2, 3], 4];
-    const modified = [1, [2, 5], 4];
+    const original: JsonValue[] = [1, [2, 3], 4];
+    const modified: JsonValue[] = [1, [2, 5], 4];
     expect(findJsonDifferences(original, modified)).toEqual([
       undefined,
       [undefined, 5],
@@ -81,14 +81,14 @@ describe("findJsonDifferences", () => {
   });
 
   test("should handle nested objects", () => {
-    const original = { a: 1, b: { c: 2, d: 3 } };
-    const modified = { a: 1, b: { c: 5, d: 3 } };
+    const original: JsonObject = { a: 1, b: { c: 2, d: 3 } };
+    const modified: JsonObject = { a: 1, b: { c: 5, d: 3 } };
     expect(findJsonDifferences(original, modified)).toEqual({ b: { c: 5 } });
   });
 
   // Complex test cases
   test("should handle complex nested structures", () => {
-    const original = {
+    const original: JsonObject = {
       name: "Product",
       version: "1.0.0",
       settings: {
@@ -106,7 +106,7 @@ describe("findJsonDifferences", () => {
       },
     };
 
-    const modified = {
+    const modified: JsonObject = {
       name: "Product",
       version: "1.0.1",
       settings: {
@@ -124,7 +124,7 @@ describe("findJsonDifferences", () => {
       },
     };
 
-    const expected = {
+    const expected: JsonObject = {
       version: "1.0.1",
       settings: {
         timeout: 60,
@@ -150,7 +150,8 @@ describe("findJsonDifferences", () => {
   });
 
   test("should handle undefined and null values", () => {
-    expect(findJsonDifferences({ a: undefined }, { a: null })).toEqual({
+    const originalWithUndefined = { a: undefined } as unknown as JsonObject;
+    expect(findJsonDifferences(originalWithUndefined, { a: null })).toEqual({
       a: null,
     });
     expect(findJsonDifferences({ a: null }, { a: 1 })).toEqual({ a: 1 });
@@ -164,8 +165,12 @@ describe("findJsonDifferences", () => {
     const modifiedPath = path.join(__dirname, "examples", "modified.json");
 
     if (fs.existsSync(originalPath) && fs.existsSync(modifiedPath)) {
-      const original = JSON.parse(fs.readFileSync(originalPath, "utf8"));
-      const modified = JSON.parse(fs.readFileSync(modifiedPath, "utf8"));
+      const original = JSON.parse(
+        fs.readFileSync(originalPath, "utf8")
+      ) as JsonValue;
+      const modified = JSON.parse(
+        fs.readFileSync(modifiedPath, "utf8")
+      ) as JsonValue;
 
       const differences = findJsonDifferences(original, modified);
 
